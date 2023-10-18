@@ -1,10 +1,10 @@
 import { Input } from '@material-tailwind/react';
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Providers/AuthProviders';
 
 const Register = () => {
-
+    const navigate = useNavigate()
     const { user, createUser, setUser } = useContext(AuthContext)
     const handleRegister = event => {
         event.preventDefault();
@@ -19,7 +19,7 @@ const Register = () => {
             .then(result => {
                 const loggedUser = result.user
                 console.log(loggedUser)
-
+                navigate("/")
             })
             .catch(err => {
                 console.log(err)
@@ -32,7 +32,7 @@ const Register = () => {
                 <form onSubmit={handleRegister} className='flex  flex-col justify-center items-center gap-2'>
                     <Input className='text-black' name="userName" color="black" type='text' label="Username" />
                     <Input className='text-black' name='photoURL' color="black" type='text' label="PhotoURL" />
-                    <Input className='text-black' name='email' color="black" type='email' required label="Email" />
+                    <Input className='text-black' type='email' name='email' color="black" required label="Email" />
                     <Input color="black" type='password' name='password' label="Password" required />
                     <button color="blue" className="bg-blue-500 h-7 hover:bg-blue-800 rounded-md px-2 mt-4 ">Register</button>
                 </form>

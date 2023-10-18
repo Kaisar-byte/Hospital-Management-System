@@ -1,13 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Input } from '@material-tailwind/react';
-import { Form, Link } from 'react-router-dom';
+import { Form, Link, useLocation, useNavigate } from 'react-router-dom';
 import { BiLogoGoogle } from "react-icons/bi";
 import { FaFacebookF } from "react-icons/fa6";
 import { FiGithub } from "react-icons/fi";
 import { AuthContext } from '../../Providers/AuthProviders';
 
 const Login = () => {
+    const [show, setShow] = useState(false)
     const { user, signIn } = useContext(AuthContext)
+    const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || "/"
 
     const handleLogin = (event) => {
         event.preventDefault();
@@ -20,6 +24,7 @@ const Login = () => {
             .then(result => {
                 const loggedUser = result.user;
                 console.log(user)
+                navigate(from, { replace: true })
             })
             .catch(err => {
                 console.log(err)
@@ -32,7 +37,10 @@ const Login = () => {
                 <h2 className='text-center text-2xl py-4 text-black-500 font-bold'>Please Login</h2>
                 <form onSubmit={handleLogin} className='flex flex-col justify-center items-center gap-2'>
                     <Input className='text-black' name='email' color="black" type='email' label="Email" required />
-                    <Input color="black" name="password" type='password' label="Password" required />
+                    <Input color="black" name="password" type={show ? "text" : "password"} label="Password" required />
+                    <p onClick={() => setShow(!show)}><small>{
+                        show ? <span className="text-xs ml-2">Hide Password</span> : <span>Show Password</span>
+                    }</small></p>
                     <h3 className='text-xs pl-20 text-white'>Forgot Password</h3>
                     <button className='bg-yellow-800 px-4 rounded-md'>Login</button>
                 </form>
